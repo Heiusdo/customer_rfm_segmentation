@@ -1,0 +1,33 @@
+=========================================================
+DAX MEASURES - Project 3 (Customer RFM Analysis)
+Tao bang _Measures 
+=========================================================
+
+-- 1. Tong so khach hang
+Tong_so_khach_hang = COUNTROWS(customer_rfm)
+
+-- 2. Tong doanh thu (tinh tren customer_rfm, da tinh san Monetary rong)
+Tong_doanh_thu = SUM(customer_rfm[monetary])
+
+-- 3. Recency trung binh
+Recency_TB = AVERAGE(customer_rfm[recency])
+
+-- 4. Frequency trung binh
+Frequency_TB = AVERAGE(customer_rfm[frequency])
+
+-- 5. Doanh thu trung binh tren 1 khach hang
+Doanh_thu_TB_moi_khach = AVERAGE(customer_rfm[monetary])
+
+-- 6. So khach VIP (dem theo dieu kien loc segment)
+So_khach_VIP = CALCULATE(COUNTROWS(customer_rfm), customer_rfm[segment] = "VIP / Khach hang trung thanh")
+
+-- 7. Ty le khach co nguy co roi bo
+Ty_le_nguy_co_roi_bo =
+DIVIDE(
+    CALCULATE(COUNTROWS(customer_rfm), customer_rfm[segment] = "Co nguy co roi bo (tung tot, lau khong quay lai)"),
+    [Tong_so_khach_hang]
+)
+
+-- 8. Doanh thu dong gop tu nhom VIP (de thay ro "20% khach hang mang lai bao nhieu % doanh thu")
+Doanh_thu_tu_VIP =
+CALCULATE(SUM(customer_rfm[monetary]), customer_rfm[segment] = "VIP / Khach hang trung thanh")
